@@ -1,4 +1,4 @@
-import {Loading} from "../connection/util";
+import {Loader} from "../connection/Util";
 
 const TYPE_SQUARE = 0;
 
@@ -15,27 +15,46 @@ export class Block{
   public Type:number;
 }
 
+
 /* This is the actuall ship block */
 export class ShipBlock{
   public parent:ShipBlock;
-  public children:ShipBlock[];
+  public children:ShipBlock[] = [];
+  public parentSide:number; //0-4(3 if triangle)
+  public ID:number;
 
-  constructor(public rotation:number,public id:number){
+  constructor(parent:(ShipBlock|null),parentSide:number,ID:number){
+    this.parentSide = parentSide;
+    this.ID = ID;
+    this.parent = parent;
+  }
 
+  public getChildrenRecursive():ShipBlock[]{
+    let array:ShipBlock[] = [];
+    this.children.forEach((element:ShipBlock)=>{
+      array.push(element);
+      array.concat(element.getChildrenRecursive());
+    });
+    return array;
+  }
+
+  public addChild(block:ShipBlock):void{
+    this.children[block.parentSide] = block;
   }
 
   public generateSideBlocks(id:number):ShipBlock[]{
-    let array:ShipBlock[];
+    let array: ShipBlock[] = [];
     let sides = this.getSides();
     for(let i:number = 0;i<sides;i++)
     {
-      //array[i] = new ShipBlock();
+      if(i==this.parentSide || this.children[i]) continue;
+      array.push(new ShipBlock(this,i,id));
     }
     return array;
   }
 
   public getSides():number{
-    if(BlockFactory.blocks[this.id].Type && BlockFactory.blocks[this.id].Type==TYPE_SQUARE){
+    if(BlockFactory.blocks[this.ID].Type && BlockFactory.blocks[this.ID].Type==TYPE_SQUARE){
       return 4;
     }
     else{
@@ -50,9 +69,11 @@ export class BlockFactory{
   //Automatically load blocks
   static initialize(){
   // WARNING: ANY here, try to remove it with interface maybe?
-    Loading.loadServerConfig((config:any)=>{
+    Loader.loadServerConfig().then((config:any)=>{
       BlockFactory.blocks = config.blocks as Block[];
     });
   }
+
 }
+
 BlockFactory.initialize();

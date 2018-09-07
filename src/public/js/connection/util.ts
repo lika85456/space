@@ -1,19 +1,22 @@
-export class Loading{
+export class Loader{
   public static config:object;
 
   /*Loads server config and passes it to callback, it loads only once*/
-  public static loadServerConfig(callback:(config:object)=>void):void{
-    if(!Loading.config){
-      console.log("Downloading /config.json");
-      Loading.get("/config.json").then((response)=>{
-        console.log("Downloading /config.json succesfull");
-        Loading.config = JSON.parse(response);
-        callback(Loading.config);
-      });
+  public static loadServerConfig():Promise<object>{
+    return new Promise((resolve)=>{
+      if(!Loader.config){
+        console.log("Downloading /config.json");
+        Loader.get("/config.json").then((response)=>{
+          console.log("Downloading /config.json succesfull");
+          Loader.config = JSON.parse(response);
+          resolve(Loader.config);
+        });
 
-    }
-    else
-      callback(Loading.config);
+      }
+      else
+        resolve(Loader.config);
+    });
+
   }
 
   private static get(url:string):Promise<string>{
