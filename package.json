@@ -13,9 +13,11 @@
   "dependencies": {
     "@types/express": "^4.16.0",
     "@types/pixi.js": "^4.8.0",
+    "@types/socket.io": "^1.4.38",
     "commonjs": "0.0.1",
     "express": "^4.16.3",
-    "pixi.js": "^4.8.2"
+    "pixi.js": "^4.8.2",
+    "socket.io": "^2.1.1"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",

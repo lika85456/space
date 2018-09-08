@@ -13,6 +13,7 @@ export class Block{
   public MaxHP:number;
   public HP:number;
   public Type:number;
+  public static Size = 64;
 }
 
 
@@ -27,6 +28,24 @@ export class ShipBlock{
     this.parentSide = parentSide;
     this.ID = ID;
     this.parent = parent;
+  }
+
+  /*Returns a position for a root block*/
+  public getAbsolutePosition():{x:number,y:number,rotation:number}{
+    if(!this.parent) return {x:0,y:0,rotation:0};
+    let position:{x:number,y:number,rotation:number} = this.parent.getAbsolutePosition();
+    let angle = 0;
+    if(this.getSides()==4)
+    {
+      angle = this.parentSide/2*Math.PI; //converts <0,4> to <0,2PI>
+    }
+    else{
+      angle = this.parentSide/3*2*Math.PI; //converts to triangle angles(atleast i hope)
+      position.rotation+=angle;
+    }
+    position.x+=Math.sin(angle)*Block.Size;
+    position.y+=Math.cos(angle)*Block.Size;
+    return position;
   }
 
   public getChildrenRecursive():ShipBlock[]{
