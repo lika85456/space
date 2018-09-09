@@ -4,8 +4,6 @@ import {ServerMap} from "./ServerMap";
 import {Map} from "../public/js/game/Map";
 const MAP_UPDATE_TIMEOUT = 50;
 
-
-
 export class GameServer{
   public io:socketIo.Server;
   /*Game data*/
@@ -30,6 +28,7 @@ export class GameServer{
       socket.on("disconnect",()=>{
         self.map.deletePlayer(player.position.id);
         clearTimeout(self.intervals[player.position.id]);
+        self.io.emit("PlayerDisconnected",player.position.id);
         console.log(port+":Player disconnected. Total: "+self.map.players.length);
       });
 

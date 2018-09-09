@@ -1,19 +1,37 @@
-import { MapBlock, Map, MapPosition, MapMovable } from "../public/js/game/Map";
+import { Map, MapPosition, MapMovable } from "../public/js/game/Map";
 import { Player } from "../public/js/game/Player";
-import { ShipBlock, BlockFactory } from "../public/js/game/Block";
+import { ShipBlock, BlockFactory,MapBlock } from "../public/js/game/Block";
 
 const UPDATE_DISTANCE = 2000; //
 const MAP_SIZE = 50000; //1000 = monitor width
+const DRAG = 0.95; //5% of velocity will be lost at the time
 
 export class ServerMap extends Map {
-
+  private lastTimeCalled:number;
   constructor() {
     super(MAP_SIZE);
+    this.lastTimeCalled = new Date().getTime();
+
+    setInterval(this.update,16); //60TPS
   }
 
-  /*G*enerate server updates*/
+  /**Called every server tick*/
+  public update():void{
+    //Time management
+    let now = new Date().getTime();
+    let time = now-this.lastTimeCalled;
+    this.lastTimeCalled = now;
+
+    //player&blocks movement
+    if(this.players)
+    this.players.forEach((player)=>{
+      player.position.move(time,MAP_SIZE,DRAG);
+    });
+
+  }
+
+  /**Generate server updates*/
   public generateUpdates(id: number): string {
-    //TODO CODE REPEATING
     let generatePositionUpdate = function(player: Player, array: MapMovable[]): MapPosition[] {
       let MBlocks: MapPosition[] = [];
       array.forEach((element: any) => {
@@ -68,7 +86,7 @@ export class ServerMap extends Map {
       block.position.id = block.position.x * MAP_SIZE + block.position.y;
       self.blocks.push(block);
     });
-    this.players.splice(this.players.indexOf(player), 1);
+    super.deletePlayerById(id);
   }
 
   /**Generates new player, adds him to map and return the instance*/

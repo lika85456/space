@@ -15,14 +15,25 @@ if (window.location.href.includes("play?port")) {
   });
 
   socket.addEventListener("MapUpdate", parseMapUpdate);
-
+  socket.addEventListener("PlayerDisconnected",parsePlayerDisconnected);
 }
 
-/*This is after loading map*/
+/**This is after loading map*/
 function startGame() {
   console.log("Game started");
 }
 
 function parseMapUpdate(str: string) {
-  console.dir(str);
+  let mapUpdate = JSON.parse(str) as game.MapUpdate;
+  mapUpdate.players.forEach((element:game.MapPosition)=>{
+    map.getPlayerById(element.id).position = element;
+  });
+  mapUpdate.blocks.forEach((element:game.MapPosition)=>{
+    map.getBlockById(element.id).position = element;
+  });
+}
+
+function parsePlayerDisconnected(str:string){
+  let playerId = parseInt(str);
+  map.deletePlayerById(playerId);
 }

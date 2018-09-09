@@ -1,5 +1,5 @@
 import { Loader } from "../connection/Util";
-
+import {MapPosition} from "./Map";
 const TYPE_SQUARE = 0;
 
 
@@ -16,6 +16,14 @@ export class Block {
   public static Size = 64;
 }
 
+/*This is gonna be a "resource" for players, they get it if they destroy it*/
+export class MapBlock {
+  public ID: number;
+  public HP: number;
+  public MaxHP: number;
+  public collectible: boolean;
+  public position: MapPosition;
+}
 
 /* This is the actuall ship block */
 export class ShipBlock {

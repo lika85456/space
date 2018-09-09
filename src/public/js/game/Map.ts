@@ -1,5 +1,5 @@
 import { Player } from "./Player";
-
+import {MapBlock} from "./Block";
 
 export class MapPosition {
   x: number = 0;
@@ -9,6 +9,20 @@ export class MapPosition {
   angle: number = 0;
   force: boolean = false; //if thrusters are on
   id: number = 0; //object id, not type id
+
+  public move(time:number,mapSize:number,drag:number):void{
+    //We dont care of force, thats only for graphics
+    this.x+=time*this.velocity*Math.sin(this.velocityAngle);
+    this.y+=time*this.velocity*Math.cos(this.velocityAngle);
+    //TODO Clamping
+    if(this.x<0) this.x = 0;
+    if(this.y<0) this.y = 0;
+    if(this.x>mapSize) this.x = mapSize;
+    if(this.y>mapSize) this.y = mapSize;
+    //drag
+    this.velocity *= drag;
+  }
+
 }
 
 export interface MapMovable {
@@ -26,7 +40,11 @@ export class Map {
   public blocks: MapBlock[] = [];
 
   constructor(public size: number) {
+  }
 
+  public deletePlayerById(id:number):void{
+    let player:Player = this.getPlayerById(id);
+    this.players.slice(this.players.indexOf(player),1);
   }
 
   public getPlayerById(id: number): Player {
@@ -36,14 +54,12 @@ export class Map {
     console.error("Player doesnt exists!");
     return new Player();
   }
-}
 
-
-/*This is gonna be a "resource" for players, they get it if they destroy it*/
-export class MapBlock {
-  public ID: number;
-  public HP: number;
-  public MaxHP: number;
-  public collectible: boolean;
-  public position: MapPosition;
+  public getBlockById(id: number):MapBlock{
+    for (let i = 0; i < this.blocks.length; i++) {
+      if (this.blocks[i].position.id == id) return this.blocks[i];
+    }
+    console.error("Block doesnt exists!");
+    return new MapBlock();
+  }
 }
