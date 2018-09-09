@@ -1,10 +1,10 @@
 import {expect} from 'chai';
 import * as Game from "../public/js/game/Game";
-import {Loading} from "../public/js/connection/util";
+import {Loader} from "../public/js/connection/util";
 
 describe("Game block side generating test", () => {
   it("should generate 2 to 3 ShipBlocks", () => {
-    Loading.loadServerConfig().then(()=>{
+    Loader.loadServerConfig().then(()=>{
       let block:Game.ShipBlock = new Game.ShipBlock(null,0,0);
       let blocks:Game.ShipBlock[] = block.generateSideBlocks(0);
       expect(blocks.length>0).to.be.true;
@@ -14,7 +14,7 @@ describe("Game block side generating test", () => {
 
 describe("Game block adding", () => {
   it("Should generate 3 ShipBlocks and add them to root block", () => {
-    Loading.loadServerConfig().then(()=>{
+    Loader.loadServerConfig().then(()=>{
       let block:Game.ShipBlock = new Game.ShipBlock(null,0,0);
       let blocks:Game.ShipBlock[] = block.generateSideBlocks(0);
       while(blocks.length>0)
@@ -30,7 +30,7 @@ describe("Game block adding", () => {
 
 describe("Recursively adding 100 bocks", () => {
   it("root.getChildrenRecursive().length should be 100", () => {
-    Loading.loadServerConfig().then(()=>{
+    Loader.loadServerConfig().then(()=>{
       const rootBlock:Game.ShipBlock = new Game.ShipBlock(null,0,0);;
       let block:Game.ShipBlock = rootBlock;
       let blocks:Game.ShipBlock[] = block.generateSideBlocks(0);

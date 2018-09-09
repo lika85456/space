@@ -2,7 +2,7 @@ import {Loader} from "../connection/Util";
 
 const TYPE_SQUARE = 0;
 
-/* Just pure data, loaded from server */
+
 export class Block{
   public Name:string;
   public Tier:number;

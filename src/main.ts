@@ -2,17 +2,32 @@
 import CONFIG from './config';
 import * as express from 'express';
 import * as path from "path";
+import {GameController} from "./server/GameController";
 
+//Static file loading part
 const app = express();
 
 app.set("port",process.env.PORT || CONFIG.PORT);
 app.use(express.static(path.join(__dirname,"public")));
 app.use(express.static('public'));
 app.use(express.static("src"));
-app.get("/connect",function(req,res){
-  res.send("hello world");
-});
 app.listen(app.get("port"),()=>{
   console.log("Server started");
   console.log("Public files path: "+path.join(__dirname,"public"));
+});
+
+
+//GameServer part
+let gameController:GameController = new GameController({
+  maxServers:50,
+  playersOnServer:100
+});
+
+
+app.get("/play",(req,res)=>{
+  if(req.query.port==null)
+  {
+    res.redirect("/play?port="+gameController.getFreeServerPort());
+  }
+  res.sendFile(path.resolve("public","index.html"));
 });

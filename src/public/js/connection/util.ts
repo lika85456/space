@@ -21,12 +21,15 @@ export class Loader{
 
   private static get(url:string):Promise<string>{
     return new Promise((resolve)=>{
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', url);
-      xhr.onload = function() {
-          resolve(xhr.responseText);
-      };
-      xhr.send();
+      try{
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.onload = function() {
+            resolve(xhr.responseText);
+        };
+        xhr.send();
+      }
+      catch(e){console.log(e);}
 
     });
   }

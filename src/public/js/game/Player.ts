@@ -10,11 +10,14 @@ export class Player implements MapMovable{
   public velocityAngle:number;
   public name:string;
   public id:number;
+  public force:boolean;
 
   public update(updateJson:MapMovable):void{
     this.x = updateJson.x;
     this.y = updateJson.y;
     this.velocity = updateJson.velocity;
+    this.velocityAngle = updateJson.velocityAngle;
     this.angle = updateJson.angle;
+    this.force = updateJson.force;
   }
 }
