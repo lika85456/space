@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import * as Game from "../public/js/game/Game";
+import * as Game from "../public/js/game/Client";
 import {Loader} from "../public/js/connection/util";
 
 describe("Game block side generating test", () => {

@@ -1,12 +1,12 @@
-export class Loader{
-  public static config:object;
+export class Loader {
+  public static config: object;
 
   /*Loads server config and passes it to callback, it loads only once*/
-  public static loadServerConfig():Promise<object>{
-    return new Promise((resolve)=>{
-      if(!Loader.config){
+  public static loadServerConfig(): Promise<object> {
+    return new Promise((resolve) => {
+      if (!Loader.config) {
         console.log("Downloading /config.json");
-        Loader.get("/config.json").then((response)=>{
+        Loader.get("/config.json").then((response) => {
           console.log("Downloading /config.json succesfull");
           Loader.config = JSON.parse(response);
           resolve(Loader.config);
@@ -19,17 +19,17 @@ export class Loader{
 
   }
 
-  private static get(url:string):Promise<string>{
-    return new Promise((resolve)=>{
-      try{
+  private static get(url: string): Promise<string> {
+    return new Promise((resolve) => {
+      try {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url);
         xhr.onload = function() {
-            resolve(xhr.responseText);
+          resolve(xhr.responseText);
         };
         xhr.send();
       }
-      catch(e){console.log(e);}
+      catch (e) { console.log(e); }
 
     });
   }

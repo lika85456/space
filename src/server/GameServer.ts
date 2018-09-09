@@ -1,8 +1,7 @@
 import * as socketIo from 'socket.io';
 import * as express from "express";
 import {ServerMap} from "./ServerMap";
-import {Player} from "../public/js/game/Player";
-
+import {Map} from "../public/js/game/Map";
 const MAP_UPDATE_TIMEOUT = 50;
 
 
@@ -15,21 +14,22 @@ export class GameServer{
 
   constructor(public port:number){
     this.initiateIoServer(port);
+
     let self = this;
     this.io.on('connection', function(socket: socketIo.Socket){
-      console.log(port+":Player connected. Total: "+(self.map.players.length+1));
-      let player:Player = self.map.generateNewPlayer();
+      let player = self.map.generateNewPlayer();
+
       //first of, emit map
-      socket.emit("map",JSON.stringify(self.map));
+      socket.emit("map",JSON.stringify(self.map as Map));
 
       //every MAP_UPDATE_TIMEOUT ms update map
-      self.intervals[player.id] = setInterval(()=>{
-        socket.emit("MapUpdate",self.map.generateUpdates(player.id));
+      self.intervals[player.position.id] = setInterval(()=>{
+        socket.emit("MapUpdate",self.map.generateUpdates(player.position.id));
       },MAP_UPDATE_TIMEOUT);
 
       socket.on("disconnect",()=>{
-        self.map.deletePlayer(player.id);
-        clearTimeout(self.intervals[player.id]);
+        self.map.deletePlayer(player.position.id);
+        clearTimeout(self.intervals[player.position.id]);
         console.log(port+":Player disconnected. Total: "+self.map.players.length);
       });
 

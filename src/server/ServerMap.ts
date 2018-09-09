@@ -1,4 +1,4 @@
-import { MapBlock, IMap, MapMovable, MapUpdate,Map } from "../public/js/game/Map";
+import { MapBlock, Map, MapPosition, MapMovable } from "../public/js/game/Map";
 import { Player } from "../public/js/game/Player";
 import { ShipBlock, BlockFactory } from "../public/js/game/Block";
 
@@ -7,56 +7,42 @@ const MAP_SIZE = 50000; //1000 = monitor width
 
 export class ServerMap extends Map {
 
-  constructor(size:number){
-    super(size);
+  constructor() {
+    super(MAP_SIZE);
   }
 
-  /*Generate server updates*/
+  /*G*enerate server updates*/
   public generateUpdates(id: number): string {
     //TODO CODE REPEATING
-    let generateBlocksUpdates = function(player: Player): MapMovable[] {
-      let MBlocks: MapMovable[] = [];
-      this.blocks.forEach((element:MapMovable) => {
-        if (player.x > element.x - UPDATE_DISTANCE / 2 &&
-          player.x < element.x + UPDATE_DISTANCE / 2 &&
-          player.y > element.y - UPDATE_DISTANCE / 2 &&
-          player.y < element.y + UPDATE_DISTANCE / 2) {
-          let playerToPush: MapMovable = element as MapMovable;
-          MBlocks.push(playerToPush);
+    let generatePositionUpdate = function(player: Player, array: MapMovable[]): MapPosition[] {
+      let MBlocks: MapPosition[] = [];
+      array.forEach((element: any) => {
+        let position: MapPosition = element.position;
+        if (player.position.x > position.x - UPDATE_DISTANCE / 2 &&
+          player.position.x < position.x + UPDATE_DISTANCE / 2 &&
+          player.position.y > position.y - UPDATE_DISTANCE / 2 &&
+          player.position.y < position.y + UPDATE_DISTANCE / 2) {
+          MBlocks.push(position);
         }
       });
       return MBlocks;
     };
-
-    let generatePlayerUpdates = function(player: Player): MapMovable[] {
-      let MPlayers: MapMovable[] = [];
-
-      this.players.forEach((element:MapMovable) => {
-        if (player.x > element.x - UPDATE_DISTANCE / 2 &&
-          player.x < element.x + UPDATE_DISTANCE / 2 &&
-          player.y > element.y - UPDATE_DISTANCE / 2 &&
-          player.y < element.y + UPDATE_DISTANCE / 2) {
-          let playerToPush: MapMovable = element as MapMovable;
-          MPlayers.push(playerToPush);
-        }
-      });
-      return MPlayers;
-    };
-
 
     let player: Player = this.getPlayerById(id);
     if (player == null) {
       console.log("Sending to dead");
       return "";
     }
-    return JSON.stringify({ players: this.generatePlayerUpdates(player),
-      blocks: generateBlocksUpdates(player) });
+    return JSON.stringify({
+      players: generatePositionUpdate(player, this.players),
+      blocks: generatePositionUpdate(player, this.blocks)
+    });
   }
 
 
   public getPlayerById(id: number): Player {
     for (let i = 0; i < this.players.length; i++) {
-      if (this.players[i].id == id) return this.players[i];
+      if (this.players[i].position.id == id) return this.players[i];
     }
     console.log("This player doesnt exists: " + id);
     console.dir(this.players);
@@ -69,37 +55,37 @@ export class ServerMap extends Map {
     shipBlocks.forEach((element) => {
       let position = element.getAbsolutePosition();
       let block = new MapBlock();
-      block.x = position.x + player.x;
-      block.y = position.y + player.y;
-      block.angle = position.rotation;
-      block.velocityAngle = 0;
-      block.velocity = 0;
+      block.position.x = position.x + player.position.x;
+      block.position.y = position.y + player.position.y;
+      block.position.angle = position.rotation;
+      block.position.velocityAngle = 0;
+      block.position.velocity = 0;
       block.ID = element.ID;
       block.HP = 0;
       block.MaxHP = BlockFactory.blocks[block.ID].MaxHP;
       block.collectible = true;
-      block.force = false;
-      block.id = block.x * MAP_SIZE + block.y;
+      block.position.force = false;
+      block.position.id = block.position.x * MAP_SIZE + block.position.y;
       self.blocks.push(block);
     });
-
     this.players.splice(this.players.indexOf(player), 1);
   }
 
-  /*Generates new player, adds him to map and return the instance*/
+  /**Generates new player, adds him to map and return the instance*/
   public generateNewPlayer(): Player {
     let player: Player = new Player();
 
     player.rootBlock = new ShipBlock(null, 0, 0);
-    player.x = Math.floor(Math.random() * MAP_SIZE);
-    player.y = Math.floor(Math.random() * MAP_SIZE);
-    player.velocity = 0;
-    player.angle = Math.random() * 2 * Math.PI;
-    player.velocityAngle = 0;
-    player.name = "Unnamed";
-    player.id = this.getFirstEmptySlot();
+    player.position = new MapPosition();
+    player.position.x = Math.floor(Math.random() * MAP_SIZE);
+    player.position.y = Math.floor(Math.random() * MAP_SIZE);
+    player.position.velocity = 0;
+    player.position.angle = Math.random() * 2 * Math.PI;
+    player.position.velocityAngle = 0;
+    player.name = "User"+Math.floor(Math.random()*10000);
+    player.position.id = this.getFirstEmptySlot();
 
-    this.players[player.id] = player;
+    this.players[player.position.id] = player;
     return player;
   }
 
