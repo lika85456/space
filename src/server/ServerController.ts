@@ -1,4 +1,4 @@
-import { GameServer } from "./GameServer";
+import { Server } from "./Server";
 //this tells user to wich server connect, if too many players, add servers otherwise turn off servers
 
 interface IConfig {
@@ -6,16 +6,16 @@ interface IConfig {
   playersOnServer?: number;
 }
 
-export class GameController {
+export class ServerController {
 
-  public gameServers: GameServer[] = [];
+  public gameServers: Server[] = [];
   private maxServers: number = 10;
   private playersOnServer: number = 100;
 
   constructor(config: IConfig) {
     if (config.maxServers) this.maxServers = config.maxServers;
     if (config.playersOnServer) this.playersOnServer = config.playersOnServer;
-    this.gameServers.push(new GameServer(8000));
+    this.addServer();
   }
 
   public getFreeServerPort(): number {
@@ -31,7 +31,7 @@ export class GameController {
   }
 
   public addServer(): number {
-    this.gameServers.push(new GameServer(8000 + this.gameServers.length));
+    this.gameServers.push(new Server(8000 + this.gameServers.length));
     return 7999 + this.gameServers.length;
   }
 }

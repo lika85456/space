@@ -29,11 +29,6 @@ export interface MapMovable {
   position: MapPosition;
 }
 
-export class MapUpdate {
-  players: MapPosition[];
-  blocks: MapPosition[];
-}
-
 /*Map container*/
 export class Map {
   public players: Player[] = [];

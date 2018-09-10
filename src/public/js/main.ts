@@ -1,5 +1,5 @@
 import * as sio from "socket.io-client";
-import * as game from "./game/Client";
+import * as game from "./client/Client";
 
 let client:game.Client;
 

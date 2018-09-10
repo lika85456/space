@@ -2,7 +2,7 @@
 import CONFIG from './config';
 import * as express from 'express';
 import * as path from "path";
-import {GameController} from "./server/GameController";
+import {ServerController} from "./server/ServerController";
 
 //Static file loading part
 const app = express();
@@ -18,7 +18,7 @@ app.listen(app.get("port"),()=>{
 
 
 //GameServer part
-let gameController:GameController = new GameController({
+let gameController:ServerController = new ServerController({
   maxServers:50,
   playersOnServer:100
 });

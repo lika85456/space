@@ -1,10 +1,10 @@
 import * as socketIo from 'socket.io';
 import * as express from "express";
-import {ServerMap} from "./ServerMap";
-import {Map} from "../public/js/game/Map";
+import {ServerMap} from "./models/ServerMap";
+import {Map} from "../public/js/shared/game/Map";
 const MAP_UPDATE_TIMEOUT = 50;
 
-export class GameServer{
+export class Server{
   public io:socketIo.Server;
   /*Game data*/
   public map:ServerMap;

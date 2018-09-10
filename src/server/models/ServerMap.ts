@@ -1,6 +1,7 @@
-import { Map, MapPosition, MapMovable } from "../public/js/game/Map";
-import { Player } from "../public/js/game/Player";
-import { ShipBlock, BlockFactory,MapBlock } from "../public/js/game/Block";
+import { Map, MapPosition, MapMovable } from "../../public/js/shared/game/Map";
+import { Player } from "../../public/js/shared/game/Player";
+import { ShipBlock, MapBlock } from "../../public/js/shared/game/Block";
+import {blocks} from "../../public/js//shared/game/Config";
 
 const UPDATE_DISTANCE = 2000; //
 const MAP_SIZE = 50000; //1000 = monitor width
@@ -80,7 +81,7 @@ export class ServerMap extends Map {
       block.position.velocity = 0;
       block.ID = element.ID;
       block.HP = 0;
-      block.MaxHP = BlockFactory.blocks[block.ID].MaxHP;
+      block.MaxHP = blocks[block.ID].MaxHP;
       block.collectible = true;
       block.position.force = false;
       block.position.id = block.position.x * MAP_SIZE + block.position.y;

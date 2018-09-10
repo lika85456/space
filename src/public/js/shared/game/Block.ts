@@ -1,12 +1,14 @@
-import { Loader } from "../connection/Util";
 import {MapPosition} from "./Map";
+import { blocks } from "./Config";
+/**Actuall block factory*/
+
 const TYPE_SQUARE = 0;
 
 
 export class Block {
   public Name: string;
   public Tier: number;
-  public ID: number;
+  public BlockId: number;
   public Weight: number;
   public CPUDraw: number;
   public EnergyDraw: number;
@@ -16,7 +18,7 @@ export class Block {
   public static Size = 64;
 }
 
-/*This is gonna be a "resource" for players, they get it if they destroy it*/
+/**This is gonna be a "resource" for players, they get it if they destroy it*/
 export class MapBlock {
   public ID: number;
   public HP: number;
@@ -25,7 +27,9 @@ export class MapBlock {
   public position: MapPosition;
 }
 
-/* This is the actuall ship block */
+
+
+/** This is the actuall ship block */
 export class ShipBlock {
   public parent: ShipBlock;
   public children: ShipBlock[] = [];
@@ -38,7 +42,7 @@ export class ShipBlock {
     this.parent = parent;
   }
 
-  /*Returns a position for a root block*/
+  /**Returns a position for a root block*/
   public getAbsolutePosition(): { x: number, y: number, rotation: number } {
     if (!this.parent) return { x: 0, y: 0, rotation: 0 };
     let position: { x: number, y: number, rotation: number } = this.parent.getAbsolutePosition();
@@ -54,6 +58,7 @@ export class ShipBlock {
     position.y += Math.cos(angle) * Block.Size;
     return position;
   }
+
 
   public getChildrenRecursive(): ShipBlock[] {
     let array: ShipBlock[] = [];
@@ -79,7 +84,7 @@ export class ShipBlock {
   }
 
   public getSides(): number {
-    if (BlockFactory.blocks[this.ID].Type && BlockFactory.blocks[this.ID].Type == TYPE_SQUARE) {
+    if (blocks[this.ID].Type && blocks[this.ID].Type == TYPE_SQUARE) {
       return 4;
     }
     else {
@@ -88,17 +93,3 @@ export class ShipBlock {
   }
 
 }
-
-export class BlockFactory {
-  public static blocks: Block[];
-  //Automatically load blocks
-  static initialize() {
-    // WARNING: ANY here, try to remove it with interface maybe?
-    Loader.loadServerConfig().then((config: any) => {
-      BlockFactory.blocks = config.blocks as Block[];
-    });
-  }
-
-}
-
-BlockFactory.initialize();

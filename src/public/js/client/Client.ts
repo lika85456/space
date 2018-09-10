@@ -1,9 +1,6 @@
-export * from "./Block";
-export * from "./Map";
-export * from "./Player";
-
-import { Map, MapUpdate, MapPosition } from "./Map";
-import { Player } from "./Player";
+import { Map, MapPosition } from "../shared/Game/Map";
+import { Player } from "../shared/Game/Player";
+import { MapUpdate } from "../shared/game/Events";
 
 export class Client {
   public map: Map;
