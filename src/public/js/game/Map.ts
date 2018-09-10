@@ -42,8 +42,14 @@ export class Map {
   constructor(public size: number) {
   }
 
+  public addPlayer(player:Player):void{
+    if(this.getPlayerById(player.position.id)==null)
+      this.players.push(player);
+  }
+
   public deletePlayerById(id:number):void{
     let player:Player = this.getPlayerById(id);
+    console.log("Deleting "+this.players.indexOf(player));
     this.players.slice(this.players.indexOf(player),1);
   }
 
@@ -51,8 +57,8 @@ export class Map {
     for (let i = 0; i < this.players.length; i++) {
       if (this.players[i].position.id == id) return this.players[i];
     }
-    console.error("Player doesnt exists!");
-    return new Player();
+
+    return null;
   }
 
   public getBlockById(id: number):MapBlock{

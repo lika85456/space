@@ -16,7 +16,7 @@ export class GameServer{
     let self = this;
     this.io.on('connection', function(socket: socketIo.Socket){
       let player = self.map.generateNewPlayer();
-
+      console.log(port+":Player connected. Total: "+self.map.players.length+ " IP:"+socket.handshake.address);
       //first of, emit map
       socket.emit("map",JSON.stringify(self.map as Map));
 
@@ -24,6 +24,8 @@ export class GameServer{
       self.intervals[player.position.id] = setInterval(()=>{
         socket.emit("MapUpdate",self.map.generateUpdates(player.position.id));
       },MAP_UPDATE_TIMEOUT);
+
+      self.io.emit("PlayerConnected",JSON.stringify(player));
 
       socket.on("disconnect",()=>{
         self.map.deletePlayer(player.position.id);
