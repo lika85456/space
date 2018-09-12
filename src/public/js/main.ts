@@ -8,8 +8,9 @@ const documentHandler = new DocumentHandler();
 let client:game.Client;
 
 AjaxModel.loadUrl("/servers").then((responseJson:string)=>{
+  console.log("servers");
   documentHandler.setServerSelector(JSON.parse(responseJson) as ServerInfo);
-});
+}).catch((http)=>{console.dir(http)});
 
 if (window.location.href.includes("play?port")) {
   let port: number = Number(window.location.href.split("?port=")[1]);

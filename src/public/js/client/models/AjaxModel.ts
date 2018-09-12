@@ -6,7 +6,6 @@ export class AjaxModel{
           if (this.readyState == 4 && this.status == 200) {
               resolve(this.responseText);
          }
-         else{reject();}
       };
       xhttp.open("GET", url, true);
       xhttp.send();
