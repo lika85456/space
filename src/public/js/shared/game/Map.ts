@@ -63,4 +63,12 @@ export class Map {
     console.error("Block doesnt exists!");
     return new MapBlock();
   }
+
+  public getColors():number[]{
+    let ret = [0,0,0,0];
+    this.players.forEach((e:Player)=>{
+      ret[e.color]++;
+    });
+    return ret;
+  }
 }

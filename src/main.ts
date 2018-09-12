@@ -16,9 +16,7 @@ app.listen(app.get("port"),()=>{
   console.log("Public files path: "+path.join(__dirname,"public"));
 });
 
-
-//GameServer part
-let gameController:ServerController = new ServerController({
+let serverController:ServerController = new ServerController({
   maxServers:50,
   playersOnServer:100
 });
@@ -27,7 +25,11 @@ let gameController:ServerController = new ServerController({
 app.get("/play",(req,res)=>{
   if(req.query.port==null)
   {
-    res.redirect("/play?port="+gameController.getFreeServerPort());
+    res.redirect("/play?port="+serverController.getFreeServerPort());
   }
   res.sendFile(path.resolve("public","index.html"));
+});
+
+app.get("/servers",(req,res)=>{
+  res.send(JSON.stringify(serverController.generateInfo()));
 });

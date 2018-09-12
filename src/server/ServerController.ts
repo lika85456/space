@@ -1,4 +1,5 @@
 import { Server } from "./Server";
+import { ServerInfo } from "../public/js/shared/game/Events";
 //this tells user to wich server connect, if too many players, add servers otherwise turn off servers
 
 interface IConfig {
@@ -33,5 +34,13 @@ export class ServerController {
   public addServer(): number {
     this.gameServers.push(new Server(8000 + this.gameServers.length));
     return 7999 + this.gameServers.length;
+  }
+
+  public generateInfo():ServerInfo{
+    let ret:ServerInfo = {servers:[]};
+    this.gameServers.forEach((e)=>{
+      ret.servers.push({port:e.port,players:e.map.players.length});
+    });
+    return ret;
   }
 }

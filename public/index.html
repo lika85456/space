@@ -3,11 +3,49 @@
   <head>
     <meta charset="utf-8">
     <title></title>
-
+  <link rel="stylesheet" type="text/css" href="css/main.css">
   </head>
   <body>
-    <script src="js/require.js" data-main="/js/main.js">
 
-    </script>
+    <div id="loading_screen">
+      <div class="loader"></div>
+    </div>
+    <div id="server_chooser" style="display:none;">
+      <!--User name + server selection-->
+      <input type="text" placeholder="Nickname" id="nickname"/>
+      <table id = "server_table">
+        <tr><td>Server port</td><td>Players</td><td></td></tr>
+      </table>
+    </div>
+    <div id="color_chooser" style="display:none;">
+      <h1>Choose your side!</h1>
+    </div>
+    <div id="game_ui" style="display:none;">
+    <div id="top">
+      <div class="header">Top 10</div>
+      <div class="top_element">Name <div class="top_element_score">30000</div></div>
+      <div class="top_element">Name2 <div class="top_element_score">2000</div></div>
+      <div class="top_element">Name3 <div class="top_element_score">100</div></div>
+      <div class="top_element">Name <div class="top_element_score">30000</div></div>
+      <div class="top_element">Name2 <div class="top_element_score">2000</div></div>
+      <div class="top_element">Name3 <div class="top_element_score">100</div></div>
+      <div class="top_element">Name <div class="top_element_score">30000</div></div>
+      <div class="top_element">Name2 <div class="top_element_score">2000</div></div>
+      <div class="top_element">Name3 <div class="top_element_score">100</div></div>
+      <div class="top_element_selected">Me <div class="top_element_score">0</div></div>
+    </div>
+
+    <div id="chat">
+      <div id="messages_container"></div>
+      <div id="message_input">
+        <input type="text" placeholder="Enter message here"/>
+      </div>
+    </div>
+    <canvas id="canvas">
+      Your browser doesnt support canvas/WebGL.
+    </canvas>
+  </div>
+  <script src="js/require.js" data-main="/js/main.js">
+  </script>
   </body>
 </html>

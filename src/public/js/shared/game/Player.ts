@@ -5,4 +5,5 @@ export class Player implements MapMovable {
   public rootBlock: ShipBlock;
   public name: string;
   public position: MapPosition;
+  public color:number;
 }

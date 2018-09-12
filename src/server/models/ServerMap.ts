@@ -91,7 +91,7 @@ export class ServerMap extends Map {
   }
 
   /**Generates new player, adds him to map and return the instance*/
-  public generateNewPlayer(): Player {
+  public generateNewPlayer(color:number): Player {
     let player: Player = new Player();
 
     player.rootBlock = new ShipBlock(null, 0, 0);
@@ -103,7 +103,7 @@ export class ServerMap extends Map {
     player.position.velocityAngle = 0;
     player.name = "User"+Math.floor(Math.random()*10000);
     player.position.id = this.getFirstEmptySlot();
-
+    player.color = color;
     this.players[player.position.id] = player;
     return player;
   }

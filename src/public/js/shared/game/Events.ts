@@ -2,6 +2,14 @@ import { MapPosition } from "./Map";
 import { Player } from "./Player";
 import { MapBlock } from "./Block";
 
+export interface ServerInfo{
+  servers:{port:number,players:number}[];
+}
+
+export interface GameInfo{
+  sides:{side:number,players:number,selectable:boolean}[];
+}
+
 /**This is for changed positions only*/
 export interface MapUpdate{
   type: "MapUpdate";
