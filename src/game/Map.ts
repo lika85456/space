@@ -1,6 +1,11 @@
 import { Player } from "./Player";
 import {MapBlock} from "./Block";
 
+class Vector{
+  strength:number;
+  angle:number;
+}
+
 export class MapPosition {
   x: number = 0;
   y: number = 0;
@@ -9,20 +14,6 @@ export class MapPosition {
   angle: number = 0;
   force: boolean = false; //if thrusters are on
   id: number = 0; //object id, not type id
-
-  public move(time:number,mapSize:number,drag:number):void{
-    //We dont care of force, thats only for graphics
-    this.x+=time*this.velocity*Math.sin(this.velocityAngle);
-    this.y+=time*this.velocity*Math.cos(this.velocityAngle);
-    //TODO Clamping
-    if(this.x<0) this.x = 0;
-    if(this.y<0) this.y = 0;
-    if(this.x>mapSize) this.x = mapSize;
-    if(this.y>mapSize) this.y = mapSize;
-    //drag
-    this.velocity *= drag;
-  }
-
 }
 
 export interface MapMovable {
@@ -33,6 +24,8 @@ export interface MapMovable {
 export class Map {
   public players: Player[] = [];
   public blocks: MapBlock[] = [];
+  public mapSize:number = 10000;
+  public drag:number = 0.95;
 
   constructor(public size: number) {
   }
@@ -70,5 +63,18 @@ export class Map {
       ret[e.color]++;
     });
     return ret;
+  }
+
+  private moveMovable(ticks:number,movable:MapMovable):void{
+    //We dont care of force, thats only for graphics
+    movable.position.x+=ticks*movable.position.velocity*Math.sin(movable.position.velocityAngle);
+    movable.position.y+=ticks*movable.position.velocity*Math.cos(movable.position.velocityAngle);
+    //TODO Clamping
+    if(movable.position.x<0) movable.position.x = 0;
+    if(movable.position.y<0) movable.position.y = 0;
+    if(movable.position.x>this.mapSize) movable.position.x = this.mapSize;
+    if(movable.position.y>this.mapSize) movable.position.y = this.mapSize;
+    //drag
+    movable.position.velocity *= this.drag;
   }
 }

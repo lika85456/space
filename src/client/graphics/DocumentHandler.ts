@@ -1,10 +1,9 @@
-import { ServerInfo } from "../../shared/game/Events";
-
 export class DocumentHandler{
 
-  public setServerSelector(servers: ServerInfo): void {
+  public setServerSelector(): void {
     this.setVisibility("loading_screen",false);
     this.setVisibility("server_chooser",true);
+    //TODO servers table?
   }
   constructor (){
 

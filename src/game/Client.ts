@@ -1,6 +1,6 @@
-import { Map, MapPosition } from "../shared/Game/Map";
-import { Player } from "../shared/Game/Player";
-import { MapUpdate } from "../shared/game/Events";
+import { Map, MapPosition } from "./Map";
+import { Player } from "./Player";
+import { MapUpdate } from "./Events";
 
 export class Client {
   public map: Map;
